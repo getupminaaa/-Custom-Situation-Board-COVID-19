@@ -1,1 +1,1 @@
-# -Custom-Situation-Board-COVID-19
+# Custom-Situation-Board-COVID-19
