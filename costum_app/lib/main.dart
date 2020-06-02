@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -43,11 +44,11 @@ class CardLayout extends StatelessWidget{
   Widget build(BuildContext context){
     return Center(
       child: Card(
+        color: Color(0x59474646),
         child: InkWell(
           child: Container(
             width: 400,
             height: 250,
-            child: Text('카드'),
           ),
         ),
       ),
