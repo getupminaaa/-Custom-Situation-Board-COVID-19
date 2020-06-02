@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -27,6 +25,7 @@ class _BackgroundImageState extends State<BackgroundImage> {
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
+        child: CardLayout(),
         decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("lib/img/background.jpg"),
@@ -36,5 +35,22 @@ class _BackgroundImageState extends State<BackgroundImage> {
       ),
     );
   }
-
 }
+class CardLayout extends StatelessWidget{
+  CardLayout({Key key}) :
+      super(key : key);
+  @override
+  Widget build(BuildContext context){
+    return Center(
+      child: Card(
+        child: InkWell(
+          child: Container(
+            width: 400,
+            height: 250,
+            child: Text('카드'),
+          ),
+        ),
+      ),
+    );
+  }
+ }
