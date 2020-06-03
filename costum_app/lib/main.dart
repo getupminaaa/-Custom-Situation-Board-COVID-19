@@ -29,7 +29,8 @@ class _BackgroundImageState extends State<BackgroundImage> {
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("lib/img/background.jpg"),
-                fit: BoxFit.cover)),
+                fit: BoxFit.cover)
+        ),
       ),
     );
   }
@@ -59,7 +60,7 @@ class ListViewLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ListView(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 50),
         children: <Widget>[
           Container(
             child: Center(
@@ -71,7 +72,43 @@ class ListViewLayout extends StatelessWidget {
               child: CardLayout(),
             ),
           ),
+          Container(
+            child: Center(
+              child: CardLayout(),
+            )
+          ),
+          RaisedButton(
+            child: Text('Setting'),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Colors.blue,
+            padding: const EdgeInsets.all(5),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Performance())
+              );
+            },
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class Performance extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: Text('Go to Main'),
+        ),
       ),
     );
   }
