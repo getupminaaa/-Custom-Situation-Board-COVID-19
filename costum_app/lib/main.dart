@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:webview_flutter/webview_flutter.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -64,13 +64,20 @@ class ListViewLayout extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Center(
-              child: CardLayout(),
+              child: Card(
+                color: Color(0x59474646),
+                child: InkWell(
+                  child: Container(
+                    width: 400,
+                    height: 250,
+                  child: WebView(
+              initialUrl: 'https://injejuweb.herokuapp.com/map/maskstore/?lat=33.486282&lng=126.469532&level=3',
+              javascriptMode: JavascriptMode.unrestricted,
+              ),
             ),
           ),
-          Container(
-            child: Center(
-              child: CardLayout(),
-            ),
+        ),
+      ),
           ),
           Container(
             child: Center(
