@@ -11,26 +11,16 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BackgroundImage());
-  }
-}
-
-class BackgroundImage extends StatefulWidget {
-  @override
-  _BackgroundImageState createState() => _BackgroundImageState();
-}
-
-class _BackgroundImageState extends State<BackgroundImage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: ListViewLayout(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
+        home: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
                 image: AssetImage("lib/img/background.jpg"),
-                fit: BoxFit.cover)
-        ),
+                fit: BoxFit.cover
+              ),
+            ),
+            child: ListViewLayout(),
+          ),
       ),
     );
   }
@@ -49,15 +39,8 @@ Widget cardLayout(){
       ),
     );
   }
-
-class ListViewLayout extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 50),
-        children: <Widget>[
-          Container(
+Widget maskMap(){
+    return Container(
             child: Center(
               child: Card(
                 color: Color(0x59474646),
@@ -68,16 +51,29 @@ class ListViewLayout extends StatelessWidget {
                   child: WebView(
               initialUrl: 'https://injejuweb.herokuapp.com/map/maskstore/?lat=33.486282&lng=126.469532&level=3',
               javascriptMode: JavascriptMode.unrestricted,
-              ),
             ),
           ),
         ),
       ),
-          ),
+    ),
+  );
+}
+class ListViewLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 50),
+        children: <Widget>[
           Container(
             child: Center(
               child: cardLayout(),
-            )
+            ),
+          ),
+          Container(
+            child: Center(
+              child: maskMap(),
+            ),
           ),
           RaisedButton(
             child: Text('Setting'),
