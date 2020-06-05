@@ -36,11 +36,7 @@ class _BackgroundImageState extends State<BackgroundImage> {
   }
 }
 
-class CardLayout extends StatelessWidget {
-  CardLayout({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+Widget cardLayout(){
     return Center(
       child: Card(
         color: Color(0x59474646),
@@ -53,7 +49,6 @@ class CardLayout extends StatelessWidget {
       ),
     );
   }
-}
 
 class ListViewLayout extends StatelessWidget {
   @override
@@ -81,7 +76,7 @@ class ListViewLayout extends StatelessWidget {
           ),
           Container(
             child: Center(
-              child: CardLayout(),
+              child: cardLayout(),
             )
           ),
           RaisedButton(
