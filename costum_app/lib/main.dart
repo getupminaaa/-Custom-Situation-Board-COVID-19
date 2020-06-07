@@ -58,40 +58,51 @@ Widget maskMap(){
     ),
   );
 }
-class ListViewLayout extends StatelessWidget {
+
+class ListViewLayoutState extends State<ListViewLayout>{
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 50),
-        children: <Widget>[
-          Container(
-            child: Center(
-              child: cardLayout(),
+  Widget build(BuildContext context){
+    setState(() {
+      return MaterialApp(
+        home: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 50),
+          children: <Widget>[
+            Container(
+              child: Center(
+                child: cardLayout(),
+              ),
             ),
-          ),
-          Container(
-            child: Center(
-              child: maskMap(),
+
+            Container(
+              child: Center(
+                child: maskMap(),
+              ),
             ),
-          ),
-          RaisedButton(
-            child: Text('Setting'),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.blue,
-            padding: const EdgeInsets.all(5),
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Performance())
-              );
-            },
-          ),
-        ],
-      ),
-    );
+            RaisedButton(
+              child: Text('Setting'),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Colors.blue,
+              padding: const EdgeInsets.all(5),
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Performance())
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
+
+
+class ListViewLayout extends StatefulWidget{
+  @override
+  ListViewLayoutState createState() => new ListViewLayoutState();
+}
+
 
 class Performance extends StatelessWidget {
   @override
@@ -111,3 +122,5 @@ class Performance extends StatelessWidget {
     );
   }
 }
+
+
