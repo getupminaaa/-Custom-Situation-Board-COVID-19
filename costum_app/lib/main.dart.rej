@@ -1,0 +1,10 @@
+diff a/costum_app/lib/main.dart b/costum_app/lib/main.dart	(rejected hunks)
+@@ -101,7 +101,7 @@
+ 
+ class ListViewLayout extends StatefulWidget{
+   @override
+-  ListViewLayoutState createState() => new ListViewLayoutState();
++  _ListViewLayoutState createState() => new _ListViewLayoutState();
+ }
+ 
+ 
