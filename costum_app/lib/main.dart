@@ -41,27 +41,6 @@ Widget emptyCard() {
   );
 }
 
-Widget maskMap() {
-  return Container(
-    child: Center(
-      child: Card(
-        color: Color(0x59474646),
-        child: InkWell(
-          child: Container(
-            width: 400,
-            height: 250,
-            child: WebView(
-              initialUrl:
-              'https://injejuweb.herokuapp.com/map/maskstore/?lat=33.486282&lng=126.469532&level=3',
-              javascriptMode: JavascriptMode.unrestricted,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
 class ListViewLayoutState extends State<ListViewLayout> {
   @override
   Widget build(BuildContext context) {
@@ -84,11 +63,6 @@ class ListViewLayoutState extends State<ListViewLayout> {
                           height: 250,
                         ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    child: Center(
-                      child: maskMap(),
                     ),
                   ),
                   RaisedButton(

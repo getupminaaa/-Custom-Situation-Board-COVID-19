@@ -36,6 +36,7 @@ Widget build(BuildContext context){
           if (data.hasData){
             currentlat=data.data.latitude;
             currentlong=data.data.longitude;
+
             return Container(
               child: Center(
                 child: Card(
