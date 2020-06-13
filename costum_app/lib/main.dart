@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget{
+  @override
+  Widget build (BuildContext context) {
+    return new MaterialApp(
+      home: new HomePage(),
+    );
+  }
+}
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,13 +25,23 @@ class MyApp extends StatelessWidget {
             image: DecorationImage(
                 image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
           ),
-          child: ListViewLayout(),
+          child: ListViewLayout(), 
+        ),
+      floatingActionButton:
+        FloatingActionButton(
+          onPressed:(){Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Performance())
+            );
+          },
+          child: Icon(Icons.settings),
+          backgroundColor: Colors.blue,
         ),
       ),
     );
   }
 }
-
+//
 Widget emptyCard() {
   return Container(
     child: Center(
@@ -65,18 +82,7 @@ class ListViewLayoutState extends State<ListViewLayout> {
                       ),
                     ),
                   ),
-                  RaisedButton(
-                    child: Text('Setting'),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    color: Colors.blue,
-                    padding: const EdgeInsets.all(5),
-                    onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Performance())
-                      );
-                    },
-                  ),
+                  
                 ],
               ),
             );
@@ -86,7 +92,6 @@ class ListViewLayoutState extends State<ListViewLayout> {
     );
   }
 }
-
 
 class ListViewLayout extends StatefulWidget {
   @override
@@ -126,7 +131,7 @@ class Performance extends StatelessWidget {
                   child: UnusableListView(),
                 ),
               ),
-              Container(
+              Container( 
                 width: 70,
                 height: 30,
                 child: RaisedButton(
