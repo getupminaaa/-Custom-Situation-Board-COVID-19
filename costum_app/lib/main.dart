@@ -165,7 +165,6 @@ class CustomFunction {
 _UnusableListViewState unListViewState;
 _UsableListViewState uListViewState;
 
-String unusableItem = "집갈래";
 
 //listview builder로 생성 list.length만큼
 class UnusableListView extends StatefulWidget {
@@ -219,6 +218,7 @@ class _UnusableListViewState extends State<UnusableListView> {
               var selectedTiles = unusableListTiles
                   .firstWhere((x) => x.funcName == customFunction.funcName);
               uListViewState.AddFunc(selectedTiles);
+
               RemoveFunc(selectedTiles);
             }));
   }
@@ -292,13 +292,6 @@ class _UsableListViewState extends State<UsableListView> {
             },
           )),
     );
-
-    // return ListView.builder(
-    //   itemCount: usableListTiles.length,
-    //   itemBuilder: (context, index) {
-    //     return UsableListTile(usableListTiles[index]);
-    //   },
-    // );
   }
 
   Widget UsableListTile(CustomFunction customFunction) {
