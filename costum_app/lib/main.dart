@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() => runApp(MyApp());
-class MyApp extends StatelessWidget{
+
+class MyApp extends StatelessWidget {
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return new MaterialApp(
       home: new HomePage(),
     );
   }
 }
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,14 +27,12 @@ class HomePage extends StatelessWidget {
             image: DecorationImage(
                 image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
           ),
-          child: ListViewLayout(), 
+          child: ListViewLayout(),
         ),
-      floatingActionButton:
-        FloatingActionButton(
-          onPressed:(){Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Performance())
-            );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Performance()));
           },
           child: Icon(Icons.settings),
           backgroundColor: Colors.blue,
@@ -41,9 +41,11 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-//
-Widget emptyCard() {
+
+// 단추만 어떵 해겨ㅕㄹ하면 되는디! 쉽지않아 지금 돌려보면 알겠지만 context의 문제
+Widget emptyCard(CustomFunction lists) {
   return Container(
+    key: ValueKey(lists.funcName),
     child: Center(
       child: Card(
         color: Color(0x59474646),
@@ -58,46 +60,57 @@ Widget emptyCard() {
   );
 }
 
-class ListViewLayoutState extends State<ListViewLayout> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 50),
-          itemCount: 1,
-          //item count에 기능 배열의 인덱스 .length가 들어가야함
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: Card(
-                      color: Color(0x59474646),
-                      child: InkWell(
-                        child: Container(
-                          child: Text(index.toString()),
-                          width: 390,
-                          height: 250,
-                        ),
-                      ),
-                    ),
-                  ),
-                  
-                ],
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-          const Divider()),
-    );
-  }
+Widget maskMap() {
+  return Container(
+    child: Center(
+      child: Card(
+        color: Color(0x59474646),
+        child: InkWell(
+          child: Container(
+            width: 400,
+            height: 250,
+            child: WebView(
+              initialUrl:
+              'https://injejuweb.herokuapp.com/map/maskstore/?lat=33.486282&lng=126.469532&level=3',
+              javascriptMode: JavascriptMode.unrestricted,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
+
+_ListViewLayoutState mListViewState;
 
 class ListViewLayout extends StatefulWidget {
   @override
-  ListViewLayoutState createState() => ListViewLayoutState();
+  _ListViewLayoutState createState() =>
+      mListViewState = new _ListViewLayoutState();
 }
 
+class _ListViewLayoutState extends State<ListViewLayout> {
+  List<CustomFunction> Listss = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableListView(
+      onReorder: (int oldindex, int newindex) {
+        setState(() {
+          var tempfuncs = Listss[oldindex];
+          Listss.add(tempfuncs);
+        });
+      },
+      children: List.generate(Listss.length, (index){return emptyCard(Listss[index]);}),
+    );
+  }
+
+  void mAddFunc(CustomFunction selectedTiles) {
+    setState(() {
+      Listss.add(selectedTiles);
+    });
+  }
+}
 
 class Performance extends StatelessWidget {
   @override
@@ -131,7 +144,7 @@ class Performance extends StatelessWidget {
                   child: UnusableListView(),
                 ),
               ),
-              Container( 
+              Container(
                 width: 70,
                 height: 30,
                 child: RaisedButton(
@@ -165,6 +178,7 @@ class CustomFunction {
 _UnusableListViewState unListViewState;
 _UsableListViewState uListViewState;
 
+String unusableItem = "집갈래";
 
 //listview builder로 생성 list.length만큼
 class UnusableListView extends StatefulWidget {
@@ -218,7 +232,7 @@ class _UnusableListViewState extends State<UnusableListView> {
               var selectedTiles = unusableListTiles
                   .firstWhere((x) => x.funcName == customFunction.funcName);
               uListViewState.AddFunc(selectedTiles);
-
+              mListViewState.mAddFunc(selectedTiles);
               RemoveFunc(selectedTiles);
             }));
   }
@@ -292,6 +306,13 @@ class _UsableListViewState extends State<UsableListView> {
             },
           )),
     );
+
+    // return ListView.builder(
+    //   itemCount: usableListTiles.length,
+    //   itemBuilder: (context, index) {
+    //     return UsableListTile(usableListTiles[index]);
+    //   },
+    // );
   }
 
   Widget UsableListTile(CustomFunction customFunction) {
