@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:costumapp/setting.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:costumapp/masklocation.dart';
+import 'package:costumapp/status_location.dart';
 
 void main() => runApp(MyApp());
 
@@ -39,8 +40,7 @@ class HomePage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Performance()));
+            _updateResult(context);
           },
           child: Icon(Icons.settings),
           backgroundColor: Colors.blue,
@@ -48,47 +48,34 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  _updateResult(BuildContext context) async {
+    // Navigator.push는 Future를 반환합니다. Future는 선택 창에서 
+    // Navigator.pop이 호출된 이후 완료될 것입니다.
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Performance()),
+    );
+    mListViewState.mSetFunc(result);
+  }
 }
 
 // 단추만 어떵 해겨ㅕㄹ하면 되는디! 쉽지않아 지금 돌려보면 알겠지만 context의 문제
-Widget emptyCard(CustomFunction lists) {
-  return Container(
-    key: ValueKey(lists.funcName),
-    child: Center(
-      child: Card(
-        color: Color(0x59474646),
-        child: InkWell(
-          child: Container(
-            width: 400,
-            height: 250,
-          ),
-        ),
-      ),
-    ),
-  );
+Widget emptyCard(CustomFunction func) {
+  print(func.viewType);
+  //var childwidget;
+  switch (func.viewType) {
+    case "WebView":
+      return Masklocation(func:func);
+      break;
+    //TODO: HOW?
+    case "ListView":
+      return localStatus(func: func);
+      break;
+    default: 
+      return Container(key: ValueKey(func.funcName) );
+  }
 }
-
-Widget maskMap() {
-  return Container(
-    child: Center(
-      child: Card(
-        color: Color(0x59474646),
-        child: InkWell(
-          child: Container(
-            width: 400,
-            height: 250,
-            child: WebView(
-              initialUrl:
-                  'https://injejuweb.herokuapp.com/map/maskstore/?lat=33.486282&lng=126.469532&level=3',
-              javascriptMode: JavascriptMode.unrestricted,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
 //TODO:Fix
 _ListViewLayoutState mListViewState;
 
@@ -99,14 +86,11 @@ class ListViewLayout extends StatefulWidget {
 }
 
 class _ListViewLayoutState extends State<ListViewLayout> {
-  //List<CustomFunction> Listss = [];
-
 
   @override
   Widget build(BuildContext context) {
-    //return emptyCard(Listss[index]);
-
     return FutureBuilder(
+      key: UniqueKey(),
       future: _fm._readFile,
       builder: (context, snap) {
         if (snap.hasData) {
@@ -125,21 +109,11 @@ class _ListViewLayoutState extends State<ListViewLayout> {
         }
       }
     );
-    return ListView.builder(
-      itemCount: _fm.usingFunctions.length,
-      itemBuilder: (context, index) {
-        return emptyCard(_fm.usingFunctions[index]);
-      },
-    );
-
-    // return ReorderableListView(
-    //   onReorder: (int oldindex, int newindex) {
-    //     setState(() {
-    //       var tempfuncs = FunctionManager._instance.usingFunctions[oldindex];
-    //       FunctionManager._instance.usingFunctions.add(tempfuncs);
-    //     });
+    // return ListView.builder(
+    //   itemCount: _fm.usingFunctions.length,
+    //   itemBuilder: (context, index) {
+    //     return emptyCard(_fm.usingFunctions[index]);
     //   },
-    //   children: List.generate(Listss.length, (index){return emptyCard(Listss[index]);}),
     // );
   }
 
@@ -180,7 +154,6 @@ class FunctionManager {
     if (!file.existsSync()) {
       file.createSync();
     }
-//    file.writeAsStringSync("[]");
 
     Future<String> data =  file.readAsString();
 
@@ -191,14 +164,9 @@ class FunctionManager {
     //클래스가 최초 생성될때 1회 발생
     //초기화 코드
     //usingFunctions = getfromdevice
-    var lineNumber = 1;
+    //var lineNumber = 1;
 
     usingFunctions = List<CustomFunction>();
-//    usingFunctions = [
-//      CustomFunction("MaskMap"),
-//      CustomFunction("ReliefHospitals"),
-//      CustomFunction("SidoInfos"),
-//    ];
   }
 
   void write() {

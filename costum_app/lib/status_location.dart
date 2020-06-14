@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:costumapp/setting.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class localStatus extends StatefulWidget{
 
-  @override
-  _localStatus createState()=>_localStatus();
-}
+    final CustomFunction func;
+  localStatus({this.func});
 
+  @override
+  _localStatus createState()=>_localStatus(func:func);
+}
 
 class _localStatus extends State<localStatus>{
   var getPost;
+
+  final CustomFunction func;
+  _localStatus({this.func});
 
   @override
   void initState() {

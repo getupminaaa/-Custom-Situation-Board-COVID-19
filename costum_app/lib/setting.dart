@@ -1,6 +1,9 @@
 import 'package:costumapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 
 final _fm = FunctionManager();
 
@@ -31,10 +34,22 @@ class Performance extends StatelessWidget {
                 width: 400,
                 height: 270,
                 padding: const EdgeInsets.all(6),
-                child: Card(
-                  color: Color(0x59474646),
-                  child: UnusableListView(),
-                ),
+                child: FutureBuilder<List<CustomFunction>>(
+                  future: fetchFuncs(),
+                  builder: (context, data){
+                    if (data.hasError) print(data.error);
+                    return data.hasData ? 
+                      Card(
+                        color: Color(0x59474646),
+                        child: UnusableListView(funcs: data.data),
+                      ):
+                      Container(
+                        child: Center(
+                            child: CircularProgressIndicator(),
+                        ),
+                      );
+                  } 
+                ), 
               ),
               Container(
                 width: 70,
@@ -42,9 +57,7 @@ class Performance extends StatelessWidget {
                 child: RaisedButton(
                   padding: const EdgeInsets.all(5),
                   onPressed: () {
-                    mListViewState.mSetFunc(uListViewState.usableListTiles);
-                    //_fm.usingFunctions = uListViewState.usableListTiles;
-                    Navigator.pop(context);
+                    Navigator.pop(context,uListViewState.usableListTiles);
                   },
                   child: Text('Go'),
                 ),
@@ -61,37 +74,77 @@ class Performance extends StatelessWidget {
 // usable은 reorderable이어야함
 // 이 모든게 성공하면 globalkey로 앞 화면에 적용하고
 // 앞화면의 데이터를 주거나 연결해줘야할 듯
+// class CustomFunction {
+//   String funcName;
+
+// //  String elements;
+
+//   CustomFunction(String _funcName) {
+//     funcName = _funcName;
+//     //other elements initialize
+//   }
+
+//   factory CustomFunction.fromJson(Map<String, dynamic> json) {
+//     return CustomFunction(json['funcName'] as String);
+//   }
+
+//   Map<String, dynamic> toJson() =>
+//       {
+//         'funcName': funcName
+//       };
+// }
+
 class CustomFunction {
-  String funcName;
+  final String funcName;
+  final String viewType;
+  final String requirements;
+  final String reqUrl;
+  //other elements
+  CustomFunction({this.funcName, this.viewType, this.requirements, this.reqUrl});
 
-//  String elements;
-
-  CustomFunction(String _funcName) {
-    funcName = _funcName;
-    //other elements initialize
+  factory CustomFunction.fromJson(Map<String, dynamic> json){
+    return CustomFunction(
+      funcName: json['funcName'] as String, 
+      viewType: json['ViewType'] as String,
+      requirements: json['requirements'] as String,
+      reqUrl: json['reqUrl'] as String,
+      );
   }
-
-  factory CustomFunction.fromJson(Map<String, dynamic> json) {
-    return CustomFunction(json['funcName'] as String);
-  }
-
   Map<String, dynamic> toJson() =>
-      {
-        'funcName': funcName
-      };
+  {
+    'funcName': funcName,
+    'ViewType': viewType,
+    'requirements': requirements,
+    'reqUrl': reqUrl,
+  };  
+}
+
+
+List<CustomFunction> parseFuncs(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed.map<CustomFunction>((json) => CustomFunction.fromJson(json)).toList();
+}
+
+Future<List<CustomFunction>> fetchFuncs() async {
+  final response =
+      await http.get('http://injejuweb.herokuapp.com/info/apps/');
+
+  return parseFuncs(utf8.decode(response.bodyBytes));
 }
 
 
 _UnusableListViewState unListViewState;
 _UsableListViewState uListViewState;
 
-String unusableItem = "집갈래";
-
-//listview builder로 생성 list.length만큼
 class UnusableListView extends StatefulWidget {
+  final List<CustomFunction> funcs;
+  
   @override
   _UnusableListViewState createState() =>
       unListViewState = new _UnusableListViewState();
+
+  UnusableListView({this.funcs});
 }
 
 class _UnusableListViewState extends State<UnusableListView> {
@@ -104,22 +157,42 @@ class _UnusableListViewState extends State<UnusableListView> {
   void initState() {
     // TODO: Need fix
     super.initState();
-    unusableListTiles = [
-      CustomFunction("MaskMap"),
-      CustomFunction("test 2"),
-      CustomFunction("test 3"),
-    ];
+    unusableListTiles = List<CustomFunction>();
+    SetFunc(widget.funcs);
 
-    String usingName, unusableName;
-    _fm.usingFunctions.forEach((element) {
-      for (int i = 0; i < unusableListTiles.length; i++) {
-        if (element.funcName == unusableListTiles[i].funcName) {
-          unusableListTiles.removeAt(i);
-          break;
+    // unusableListTiles = [
+    //   CustomFunction("MaskMap"),
+    //   CustomFunction("test 2"),
+    //   CustomFunction("test 3"),
+    // ];
+
+    // String usingName, unusableName;
+    // _fm.usingFunctions.forEach((element) {
+    //   for (int i = 0; i < unusableListTiles.length; i++) {
+    //     if (element.funcName == unusableListTiles[i].funcName) {
+    //       unusableListTiles.removeAt(i);
+    //       break;
+    //     }
+    //   }
+    // });
+  }
+  void SetFunc(List<CustomFunction> funcs) {
+    setState(() {
+      //unusableListTiles = funcs;
+      var ishaving = false;
+      for(CustomFunction f in funcs){
+        for(CustomFunction f2 in _fm.usingFunctions){
+          if(f.funcName == f2.funcName) ishaving = true;
         }
+        print(f.funcName);
+        if(!ishaving){
+          unusableListTiles.add(new CustomFunction(funcName: f.funcName, viewType: f.viewType , requirements: f.requirements , reqUrl: f.reqUrl ));
+        }
+        ishaving = false;
       }
     });
   }
+
 
   void AddFunc(CustomFunction funcs) {
     setState(() {
@@ -225,12 +298,8 @@ class _UsableListViewState extends State<UsableListView> {
                 // removing the item at oldIndex will shorten the list by 1.
                 newindex -= 1;
               }
-              print(oldindex);
-              print(newindex);
-              var tempfunc = usableListTiles[oldindex];
-              print(usableListTiles[oldindex]);
-              usableListTiles.removeAt(oldindex);
-              usableListTiles.insert(newindex, tempfunc);
+              final CustomFunction function = usableListTiles.removeAt(oldindex);
+              usableListTiles.insert(newindex, function);
             });
           },
           scrollController: uListViewState._scrollController,
@@ -242,14 +311,6 @@ class _UsableListViewState extends State<UsableListView> {
             },
           )),
     );
-
-
-    // return ListView.builder(
-    //   itemCount: usableListTiles.length,
-    //   itemBuilder: (context, index) {
-    //     return UsableListTile(usableListTiles[index]);
-    //   },
-    // );
   }
 
   Widget UsableListTile(CustomFunction customFunction) {
