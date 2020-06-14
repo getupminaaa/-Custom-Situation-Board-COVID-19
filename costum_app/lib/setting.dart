@@ -63,15 +63,23 @@ class Performance extends StatelessWidget {
 // 앞화면의 데이터를 주거나 연결해줘야할 듯
 class CustomFunction {
   String funcName;
-  //other elements
+
+//  String elements;
 
   CustomFunction(String _funcName) {
     funcName = _funcName;
     //other elements initialize
   }
+
+  factory CustomFunction.fromJson(Map<String, dynamic> json) {
+    return CustomFunction(json['funcName'] as String);
+  }
+
+  Map<String, dynamic> toJson() =>
+      {
+        'funcName': funcName
+      };
 }
-
-
 
 
 _UnusableListViewState unListViewState;
@@ -96,22 +104,34 @@ class _UnusableListViewState extends State<UnusableListView> {
   void initState() {
     // TODO: Need fix
     super.initState();
-    unusableListTiles  = [
-      CustomFunction("test 1"),
+    unusableListTiles = [
+      CustomFunction("MaskMap"),
       CustomFunction("test 2"),
       CustomFunction("test 3"),
-    ]; 
+    ];
+
+    String usingName, unusableName;
+    _fm.usingFunctions.forEach((element) {
+      for (int i = 0; i < unusableListTiles.length; i++) {
+        if (element.funcName == unusableListTiles[i].funcName) {
+          unusableListTiles.removeAt(i);
+          break;
+        }
+      }
+    });
   }
 
   void AddFunc(CustomFunction funcs) {
     setState(() {
       unusableListTiles.add(funcs);
+      _fm.write();
     });
   }
 
   void RemoveFunc(CustomFunction funcs) {
     setState(() {
       unusableListTiles.remove(funcs);
+      _fm.write();
     });
   }
 
@@ -124,6 +144,7 @@ class _UnusableListViewState extends State<UnusableListView> {
       },
     );
   }
+
 
   Widget UnusableListTile(CustomFunction customFunction) {
     return ListTile(
@@ -154,8 +175,8 @@ class UsableListView extends StatefulWidget {
       uListViewState = new _UsableListViewState();
 }
 
-class _UsableListViewState extends State<UsableListView>{
-  List<CustomFunction> usableListTiles = [];
+class _UsableListViewState extends State<UsableListView> {
+  List<CustomFunction> usableListTiles;
 
   ScrollController _scrollController;
   double offset = 0.0;
@@ -179,12 +200,14 @@ class _UsableListViewState extends State<UsableListView>{
   void AddFunc(CustomFunction funcs) {
     setState(() {
       usableListTiles.add(funcs);
+      _fm.write();
     });
   }
 
   void RemoveFunc(CustomFunction funcs) {
     setState(() {
       usableListTiles.remove(funcs);
+      _fm.write();
     });
   }
 

@@ -10,6 +10,7 @@ class localStatus extends StatefulWidget{
   _localStatus createState()=>_localStatus();
 }
 
+
 class _localStatus extends State<localStatus>{
   var getPost;
 
