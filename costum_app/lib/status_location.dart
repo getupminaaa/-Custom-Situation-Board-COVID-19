@@ -32,7 +32,83 @@ class _localStatus extends State<localStatus>{
         future: getPost,
         builder: (context, data){
           if (data.hasData){
-            return Text('도시:${data.data.city}, 확진자:${data.data.confirm} ,격리해제:${data.data.isolation} , 사망자:${data.data.dead}');
+            return Center(
+                child: Container(
+                  width: 400,
+                  height: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.blue
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Text('${data.data.city} 현황 정보', style: TextStyle(fontSize:25, fontWeight: FontWeight.bold)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                      height: 190,
+                                      width: 110,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.red
+                                      ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Text('확진자', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold)),
+                                    Text('${data.data.confirm}', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                      height: 190,
+                                      width: 110,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.purple
+                                      ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Text('격리해제', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold)),
+                                    Text('${data.data.isolation}', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                      height: 190,
+                                      width: 110,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.yellow
+                                      ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Text('사망자', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold)),
+                                    Text('${data.data.dead}', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
           }
           else {
             return Container(
