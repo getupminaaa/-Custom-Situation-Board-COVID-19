@@ -153,6 +153,7 @@ class FunctionManager {
     var file = new File('$path/statusData.json');
     if (!file.existsSync()) {
       file.createSync();
+      file.writeAsStringSync('[]');
     }
 
     Future<String> data =  file.readAsString();

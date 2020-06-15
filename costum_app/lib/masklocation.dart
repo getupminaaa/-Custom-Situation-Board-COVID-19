@@ -38,7 +38,7 @@ class _Masklocation extends State<Masklocation> {
       child: Container(
         key: ValueKey(func.funcName),
         width: 400,
-        height: 300,
+        height: 350,
         child: FutureBuilder(
           future: getLoc,
           builder: (context, data){
@@ -51,7 +51,17 @@ class _Masklocation extends State<Masklocation> {
                   child: Card(
                     child: Column(
                       children: <Widget>[
-                        Text(func.funcName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                        Row(
+                          children: <Widget>[
+                            Text(func.funcName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            ),
+                            RaisedButton(onPressed: (){Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SecondRoute(func.reqUrl, data.data)),
+                            );
+                            }
+                            )
+                          ],
                         ),
                         Container(
                           width: 390,
@@ -96,3 +106,25 @@ class _Masklocation extends State<Masklocation> {
   }
 }
 
+class SecondRoute extends StatelessWidget {
+  String _url;
+  Position _position;
+
+  SecondRoute(String url, Position position) {
+    _url = url;
+    _position = position;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
+      ),
+      body: WebView(
+        initialUrl: '${_url}/?lat=${_position.latitude}&lng=${_position.longitude}&level=3',
+        javascriptMode: JavascriptMode.unrestricted,
+        ),
+    );
+  }
+}
