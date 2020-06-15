@@ -33,9 +33,9 @@ class HomePage extends StatelessWidget {
       home: Scaffold(
         body: Container(
           decoration: BoxDecoration(
-              // image: DecorationImage(
-              //     image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
-              ),
+            image: DecorationImage(
+                image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
+          ),
           child: ListViewLayout(),
         ),
         floatingActionButton: FloatingActionButton(
