@@ -16,8 +16,8 @@ class Performance extends StatelessWidget {
         ),
         body: Container(
           decoration: BoxDecoration(
-            // image: DecorationImage(
-            //     image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
+            image: DecorationImage(
+                image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
           ),
           child: Column(
             children: <Widget>[
@@ -35,21 +35,20 @@ class Performance extends StatelessWidget {
                 height: 270,
                 padding: const EdgeInsets.all(6),
                 child: FutureBuilder<List<CustomFunction>>(
-                  future: fetchFuncs(),
-                  builder: (context, data){
-                    if (data.hasError) print(data.error);
-                    return data.hasData ? 
-                      Card(
-                        color: Color(0x59474646),
-                        child: UnusableListView(funcs: data.data),
-                      ):
-                      Container(
-                        child: Center(
-                            child: CircularProgressIndicator(),
-                        ),
-                      );
-                  } 
-                ), 
+                    future: fetchFuncs(),
+                    builder: (context, data) {
+                      if (data.hasError) print(data.error);
+                      return data.hasData
+                          ? Card(
+                              color: Color(0x59474646),
+                              child: UnusableListView(funcs: data.data),
+                            )
+                          : Container(
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                    }),
               ),
               Container(
                 width: 70,
@@ -57,7 +56,7 @@ class Performance extends StatelessWidget {
                 child: RaisedButton(
                   padding: const EdgeInsets.all(5),
                   onPressed: () {
-                    Navigator.pop(context,uListViewState.usableListTiles);
+                    Navigator.pop(context, uListViewState.usableListTiles);
                   },
                   child: Text('Go'),
                 ),
@@ -99,47 +98,48 @@ class CustomFunction {
   final String viewType;
   final String requirements;
   final String reqUrl;
-  //other elements
-  CustomFunction({this.funcName, this.viewType, this.requirements, this.reqUrl});
 
-  factory CustomFunction.fromJson(Map<String, dynamic> json){
+  //other elements
+  CustomFunction(
+      {this.funcName, this.viewType, this.requirements, this.reqUrl});
+
+  factory CustomFunction.fromJson(Map<String, dynamic> json) {
     return CustomFunction(
-      funcName: json['funcName'] as String, 
+      funcName: json['funcName'] as String,
       viewType: json['ViewType'] as String,
       requirements: json['requirements'] as String,
       reqUrl: json['reqUrl'] as String,
-      );
+    );
   }
-  Map<String, dynamic> toJson() =>
-  {
-    'funcName': funcName,
-    'ViewType': viewType,
-    'requirements': requirements,
-    'reqUrl': reqUrl,
-  };  
-}
 
+  Map<String, dynamic> toJson() => {
+        'funcName': funcName,
+        'ViewType': viewType,
+        'requirements': requirements,
+        'reqUrl': reqUrl,
+      };
+}
 
 List<CustomFunction> parseFuncs(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed.map<CustomFunction>((json) => CustomFunction.fromJson(json)).toList();
+  return parsed
+      .map<CustomFunction>((json) => CustomFunction.fromJson(json))
+      .toList();
 }
 
 Future<List<CustomFunction>> fetchFuncs() async {
-  final response =
-      await http.get('http://injejuweb.herokuapp.com/info/apps/');
+  final response = await http.get('http://injejuweb.herokuapp.com/info/apps/');
 
   return parseFuncs(utf8.decode(response.bodyBytes));
 }
-
 
 _UnusableListViewState unListViewState;
 _UsableListViewState uListViewState;
 
 class UnusableListView extends StatefulWidget {
   final List<CustomFunction> funcs;
-  
+
   @override
   _UnusableListViewState createState() =>
       unListViewState = new _UnusableListViewState();
@@ -176,23 +176,27 @@ class _UnusableListViewState extends State<UnusableListView> {
     //   }
     // });
   }
+
   void SetFunc(List<CustomFunction> funcs) {
     setState(() {
       //unusableListTiles = funcs;
       var ishaving = false;
-      for(CustomFunction f in funcs){
-        for(CustomFunction f2 in _fm.usingFunctions){
-          if(f.funcName == f2.funcName) ishaving = true;
+      for (CustomFunction f in funcs) {
+        for (CustomFunction f2 in _fm.usingFunctions) {
+          if (f.funcName == f2.funcName) ishaving = true;
         }
         print(f.funcName);
-        if(!ishaving){
-          unusableListTiles.add(new CustomFunction(funcName: f.funcName, viewType: f.viewType , requirements: f.requirements , reqUrl: f.reqUrl ));
+        if (!ishaving) {
+          unusableListTiles.add(new CustomFunction(
+              funcName: f.funcName,
+              viewType: f.viewType,
+              requirements: f.requirements,
+              reqUrl: f.reqUrl));
         }
         ishaving = false;
       }
     });
   }
-
 
   void AddFunc(CustomFunction funcs) {
     setState(() {
@@ -217,7 +221,6 @@ class _UnusableListViewState extends State<UnusableListView> {
       },
     );
   }
-
 
   Widget UnusableListTile(CustomFunction customFunction) {
     return ListTile(
@@ -298,7 +301,8 @@ class _UsableListViewState extends State<UsableListView> {
                 // removing the item at oldIndex will shorten the list by 1.
                 newindex -= 1;
               }
-              final CustomFunction function = usableListTiles.removeAt(oldindex);
+              final CustomFunction function =
+                  usableListTiles.removeAt(oldindex);
               usableListTiles.insert(newindex, function);
             });
           },
@@ -306,7 +310,7 @@ class _UsableListViewState extends State<UsableListView> {
           scrollDirection: Axis.vertical,
           children: List.generate(
             usableListTiles.length,
-                (index) {
+            (index) {
               return UsableListTile(usableListTiles[index]);
             },
           )),
