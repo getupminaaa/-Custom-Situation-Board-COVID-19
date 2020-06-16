@@ -38,7 +38,7 @@ class _localStatus extends State<localStatus> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   width: 390,
-                  height: 260,
+                  height: 240,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: Color(0x59474646),
@@ -56,7 +56,7 @@ class _localStatus extends State<localStatus> {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Container(
-                                height: 190,
+                                height: 130,
                                 width: 110,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -80,7 +80,7 @@ class _localStatus extends State<localStatus> {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Container(
-                                height: 190,
+                                height: 130,
                                 width: 110,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -104,7 +104,7 @@ class _localStatus extends State<localStatus> {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Container(
-                                height: 190,
+                                height: 130,
                                 width: 110,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -128,12 +128,23 @@ class _localStatus extends State<localStatus> {
                           ],
                         ),
                       ),
+                      Text('기준일시: ${data.data.date}', 
+                        style: TextStyle(
+                          fontSize:15,
+                          color: Colors.white,),),
                     ],
                   ),
                 ),
               );
             } else {
               return Container(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                width: 390,
+                height: 240,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Color(0x59474646),
+                ),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -149,8 +160,9 @@ class Post {
   final int confirm;
   final int isolation;
   final int dead;
+  final String date;
 
-  Post({this.city, this.confirm, this.isolation, this.dead});
+  Post({this.city, this.confirm, this.isolation, this.dead, this.date});
 
   // factory 생성자. Post 타입의 인스턴스를 반환
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -158,7 +170,9 @@ class Post {
         city: json['시도명'],
         confirm: json['확진'],
         isolation: json['격리해제'],
-        dead: json['사망']);
+        dead: json['사망'],
+        date: json['기준일시']
+    );
   }
 }
 
