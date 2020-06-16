@@ -1,4 +1,4 @@
-package com.example.costumapp;
+package costum.costumapp;
 
 import io.flutter.embedding.android.FlutterActivity;
 
