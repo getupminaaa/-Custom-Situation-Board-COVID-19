@@ -16,8 +16,13 @@ class Performance extends StatelessWidget {
         ),
         body: Container(
           decoration: BoxDecoration(
+<<<<<<< Updated upstream
             image: DecorationImage(
                 image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
+=======
+            //image: DecorationImage(
+            //image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
+>>>>>>> Stashed changes
           ),
           child: Column(
             children: <Widget>[
@@ -304,6 +309,7 @@ class _UsableListViewState extends State<UsableListView> {
               final CustomFunction function =
                   usableListTiles.removeAt(oldindex);
               usableListTiles.insert(newindex, function);
+              _fm.write();
             });
           },
           scrollController: uListViewState._scrollController,
