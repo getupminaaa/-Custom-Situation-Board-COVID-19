@@ -15,15 +15,6 @@ class Performance extends StatelessWidget {
           title: Text("Setting"),
         ),
         body: Container(
-          decoration: BoxDecoration(
-<<<<<<< Updated upstream
-            image: DecorationImage(
-                image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
-=======
-            //image: DecorationImage(
-            //image: AssetImage("lib/img/background.jpg"), fit: BoxFit.cover),
->>>>>>> Stashed changes
-          ),
           child: Column(
             children: <Widget>[
               Container(
@@ -63,7 +54,7 @@ class Performance extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context, uListViewState.usableListTiles);
                   },
-                  child: Text('Go'),
+                  child: Text('Save'),
                 ),
               )
             ],
