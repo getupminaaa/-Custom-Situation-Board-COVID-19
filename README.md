@@ -40,5 +40,3 @@ https://github.com/django/django
 
 ### UI Flow
 
-![image-20200626140740947](/Users/jaehyunkim/Library/Application Support/typora-user-images/image-20200626140740947.png)
-
